@@ -2,6 +2,7 @@ import os
 import requests
 import xml.etree.ElementTree as ET
 import discord
+from discord.ext import tasks
 from dotenv import load_dotenv
 from datetime import datetime
 import random
@@ -74,7 +75,6 @@ def fetch_delay_info():
         area_details = "\n".join(area_info)
         result = (
             f"🚆 JR九州運行情報（最終更新: {update_time}）\n"
-            f"取得時刻: {fetched_time}\n\n"
             f"{area_details}"
         )
         return result
@@ -90,6 +90,9 @@ client = discord.Client(intents=intents)
 @client.event
 async def on_ready():
     print(f"Botが起動しました: {client.user}")
+    # ステータスを設定
+    activity = discord.Game("遅延するように祈祷中")
+    await client.change_presence(status=discord.Status.online, activity=activity)
 
 # メッセージを受信したときのイベント
 @client.event
